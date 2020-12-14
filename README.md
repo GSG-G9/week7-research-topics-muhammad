@@ -49,6 +49,7 @@
 		+ **Token Based Authentication**
 		Many web applications use JSON Web Token (JWT) instead of sessions for authentication. In the token based application, the server creates JWT with a secret and sends the JWT to the client. The client stores the JWT (usually in local storage) and includes JWT in the header with every request. The server would then validate the JWT with every request from the client and sends response.
 ![Token Based Authentication flow](/images/Token-Based-Authentication-flow.png "Token Based Authentication flow")
+
 *  What are the advantages and disadvantages of each?
 	+ **Session Based Authentication** (stateful):
 		- Advantages:
