@@ -98,3 +98,49 @@ https.createServer(options, function (req, res) {
 			<li> **Relatively complex to implement for one-session-server scenario**</li>  
 			<li>**Session data cannot be changed until its expiration time**</li> 
 			</ol>
+
+---
+### Session-management in Express
+**What is sessions?**
+> Because HTTP is stateless, in order to associate a request to any other request, you need a way to store user data between HTTP requests.
+> The solution is to store that data server side, give it an "id", and let the client only know (and pass back at every http request) that id. There you go, sessions implemented. Or you can use the client as a convenient remote storage, but you would encrypt the data and keep the secret server-side.
+
+**What are the different ways of managing sessions in express?**
+<ol>
+<li>Client-Sessions</li>
+<li>Cookie Session</li>
+<li>Express-sessions</li>
+</ol>
+
+```javascript
+const express = require('express');  
+const session = require('express-session');  
+const app = express();
+app.use(session({secret: 'secretkey'}));
+var sess;  
+app.get('/',function(req,res){  
+	sess=req.session;  
+	sess.email;
+	sess.username; 
+});
+
+router.post('/login',(req,res)  =>  {  
+	sess = req.session;  
+	sess.email  = req.body.email;  
+	res.end('done');  
+});
+
+router.get('/logout',(req,res)  =>  {  
+	req.session.destroy((err)  =>  {  
+	if(err)  {  
+	return console.log(err);  
+	}  
+	res.redirect('/');  
+});
+
+app.use('/', router);  
+  
+app.listen(process.env.PORT  ||  3000,()  =>  {  
+console.log(`App Started on PORT ${process.env.PORT  ||  3000}`);  
+});
+```
