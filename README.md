@@ -144,3 +144,123 @@ app.listen(process.env.PORT  ||  3000,()  =>  {
 console.log(`App Started on PORT ${process.env.PORT  ||  3000}`);  
 });
 ```
+
+---
+
+
+### Attacks
+**What are the following types of attack?**
+ * **Man In The Middle (MITM):** 
+			In cryptography and computer security, a **man-in-the-middle**, **monster-in-the-middle**, **machine-in-the-middle**, **monkey-in-the-middle (MITM)** or **person-in-the-middle (PITM)** attack is a cyberattack where the attacker secretly relays and possibly alters the communications between two parties who believe that they are directly communicating with each other.
+			![MITM](/images/MITM.png "MITM")
+			
+We can defend against XSS by using helmet middleware.
+-   **Using a VPN**
+-    **Only visiting HTTPS websites**
+
+
+* **Cross Site Scripting (XSS):**
+Cross-site scripting (also known as XSS) is a web security vulnerability that allows an attacker to compromise the interactions that users have with a vulnerable application.
+![Cross Site Scripting](/images/cross-site-scripting.svg "cross site scripting")
+
+We can defend against XSS by using helmet middleware.
+```javascript
+var helmet = require('helmet');
+app.use(helmet());
+```
+
+ At a minimum, disable X-Powered-By header
+ ```javascript
+app.disable('x-powered-by')
+```
+Use cookies securely.
+Don’t use the default session cookie name.
+```javascript
+var session = require('express-session')
+app.set('trust proxy', 1) // trust first proxy
+app.use(session({
+  secret: 's3Cur3',
+  name: 'sessionId'
+}))
+```
+Set cookie security options.
+```javascript
+var session = require('cookie-session')
+var express = require('express')
+var app = express()
+
+var expiryDate = new Date(Date.now() + 60 * 60 * 1000) // 1 hour
+app.use(session({
+  name: 'session',
+  keys: ['key1', 'key2'],
+  cookie: {
+    secure: true,
+    httpOnly: true,
+    domain: 'example.com',
+    path: 'foo/bar',
+    expires: expiryDate
+  }
+}))
+```
+> We can use express-sanitizer middleware
+> ```javascript
+> const  expressSanitizer  =  require('express-sanitizer');
+> app.use(express.json());
+> app.use(expressSanitizer());
+> app.post('/',  function(req,  res,  next)  {
+ > // replace an HTTP posted body property with the sanitized string
+ > const  sanitizedString  =  req.sanitize(req.body.propertyToSanitize);
+ > // send the response -- res.body.sanitized = " world"
+ > res.send({ sanitized: sanitizedString });
+> });
+> ```
+
+* **Cross Site Request Forgery (CSRF):**
+Cross site request forgery (CSRF), also known as XSRF, Sea Surf or Session Riding, is an attack vector that tricks a web browser into executing an unwanted action in an application to which a user is logged in.
+
+![csrf cross site request forgery](/images/csrf-cross-site-request-forgery.png "csrf cross site request forgery")
+
+```javascript
+const express = require('express');
+const bodyParser = require('body-parser');
+const csurf = require('csurf');
+const cookieParser = require('cookie-parser');
+
+const PORT = process.env.PORT || 3000;
+const app = express();
+
+const csrfMiddleware = csurf({
+  cookie: true
+});
+
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
+app.use(cookieParser());
+app.use(csrfMiddleware);
+
+app.get('/', (req, res) => {
+  res.send(`
+    <h1>Hello World</h1>
+    <form action="/entry" method="POST">
+      <div>
+        <label for="message">Enter a message</label>
+        <input id="message" name="message" type="text" />
+      </div>
+      <input type="submit" value="Submit" />
+      <input type="hidden" name="_csrf" value="${req.csrfToken()}" />
+    </form>
+  `);
+});
+
+app.post('/entry', (req, res) => {
+  console.log(`Message received: ${req.body.message}`);
+  res.send(`CSRF token used: ${req.body._csrf}, Message received: ${req.body.message}`);
+});
+
+app.listen(PORT, () => {
+  console.log(`Listening on http://localhost:${PORT}`);
+});
+// {"csrfToken":"7IAxiaQh-AsfSP3PHHSljjz7nBO5nMb5c4eg"}
+```
+		
