@@ -147,23 +147,22 @@ console.log(`App Started on PORT ${process.env.PORT  ||  3000}`);
 
 ---
 
-
 ### Attacks
 **What are the following types of attack?**
  * **Man In The Middle (MITM):** 
 			In cryptography and computer security, a **man-in-the-middle**, **monster-in-the-middle**, **machine-in-the-middle**, **monkey-in-the-middle (MITM)** or **person-in-the-middle (PITM)** attack is a cyberattack where the attacker secretly relays and possibly alters the communications between two parties who believe that they are directly communicating with each other.
-			![MITM](/images/MITM.png "MITM")
 			
-We can defend against XSS by using helmet middleware.
--   **Using a VPN**
--    **Only visiting HTTPS websites**
-
+			![MITM](/images/MITM.png "MITM")
+				
+	**We can defend against XSS by using helmet middleware.**
+	+ **Using a VPN**
+	+ **Only visiting HTTPS websites**
 
 * **Cross Site Scripting (XSS):**
 Cross-site scripting (also known as XSS) is a web security vulnerability that allows an attacker to compromise the interactions that users have with a vulnerable application.
 ![Cross Site Scripting](/images/cross-site-scripting.svg "cross site scripting")
 
-We can defend against XSS by using helmet middleware.
+**We can defend against XSS by using helmet middleware.**
 ```javascript
 var helmet = require('helmet');
 app.use(helmet());
@@ -220,6 +219,7 @@ Cross site request forgery (CSRF), also known as XSRF, Sea Surf or Session Ridin
 
 ![csrf cross site request forgery](/images/csrf-cross-site-request-forgery.png "csrf cross site request forgery")
 
+**We can defend against Cross Site Request Forgery (CSRF):**
 ```javascript
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -263,4 +263,5 @@ app.listen(PORT, () => {
 });
 // {"csrfToken":"7IAxiaQh-AsfSP3PHHSljjz7nBO5nMb5c4eg"}
 ```
+		
 		
