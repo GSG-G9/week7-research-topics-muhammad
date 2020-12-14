@@ -31,6 +31,27 @@
 
 ![How TLS work](/images/What-is-TLS-infographic.png  "How TLS work")
 
+
+To generate a self-signed certificate, run the following in your shell:
+
+<span style="background-color:rgba(0, 0, 0); color: #fff">openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365</span>
+
+```javascript
+const https = require('https');
+const fs = require('fs');
+
+const options = {
+  key: fs.readFileSync('key.pem'),
+  cert: fs.readFileSync('cert.pem')
+};
+
+https.createServer(options, function (req, res) {
+  res.writeHead(200);
+  res.end("hello world\n");
+}).listen(8000);
+```
+
+
 ----
 
 ### Stateless vs stateful authentication
