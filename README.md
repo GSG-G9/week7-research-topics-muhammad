@@ -33,9 +33,8 @@
 
 
 To generate a self-signed certificate, run the following in your shell:
-```
-<span style="background-color:rgba(0, 0, 0); color: #fff">openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365</span>
-```
+
+<span style="background-color: #000; color: #fff;">openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365</span>
 
 ```javascript
 const https = require('https');
